@@ -788,24 +788,20 @@ tbody.appendChild(tr);
 }
 checkClearButtonVisibility();
 }
-function clearHighScores() {
-if (highScores.length <= 3) {
-alert("Riwayat skor sudah minimal (1 per level). Tidak ada skor yang perlu dihapus.");
-return;
-}
-if (confirm("Apakah Anda yakin ingin menghapus riwayat skor lama dan menyimpan skor terbaik saja?")) {
-const keptScores = [];
-[1, 6, 7].forEach(lvl => {
-const topLvlScore = highScores
-.filter(item => Number(item.level || 1) === lvl)
-.sort((a, b) => b.nilai - a.nilai);
-if (topLvlScore) keptScores.push(topLvlScore);
-});
-highScores = keptScores;
-localStorage.setItem("aritmatikaPersamaanScoresOffline", JSON.stringify(highScores));
-displayHighScores();
-}
-}
+function clearHighScores() { if (confirm("Apakah Anda yakin ingin menghapus riwayat lokal dan menyisakan 3 skor terbaik per level?")) 
+{ let keptScores = []; 
+ [1-3].forEach(lvl =&gt; { 
+   const topLvlScores = highScores 
+     .filter(item =&gt; Number(item.level || 1) === lvl) 
+     .sort((a, b) =&gt; b.nilai - a.nilai) 
+     .slice(0, 3); // Menyisakan 3 skor terbaik per level 
+   
+   keptScores = keptScores.concat(topLvlScores); 
+ }); 
+ 
+ highScores = keptScores; 
+ localStorage.setItem("aritmatikaPersamaanScoresOffline", JSON.stringify(highScores)); 
+ displayHighScores(); } }
 </script>
 </body>
 </html>
