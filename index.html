@@ -5,357 +5,94 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Aritmatika Anak - Persamaan Sederhana</title>
 <style>
-* {
-box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 body {
-margin: 0;
-padding: 0;
-font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-background-color: #3A1E6E;
-color: #0f172a;
-display: flex;
-justify-content: center;
-align-items: center;
-min-height: 100vh;
-user-select: none;
-overflow-x: hidden;
+  margin: 0; padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #3A1E6E; color: #0f172a;
+  display: flex; justify-content: center; align-items: center;
+  min-height: 100vh; user-select: none; overflow-x: hidden;
 }
 #game-container {
-background-color: #ffffff;
-padding: 44px 40px;
-border-radius: 16px;
-border: 1px solid #e2e8f0;
-box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
-text-align: center;
-max-width: 420px;
-width: 92%;
-position: relative;
+  background-color: #ffffff; padding: 44px 40px; border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 20px 25px -5px rgba(0,0,0,0.05), 0 8px 10px -6px rgba(0,0,0,0.01);
+  text-align: center; max-width: 420px; width: 92%; position: relative;
 }
-h1 {
-color: #1e293b;
-margin-top: 0;
-font-size: 22px;
-font-weight: 700;
-}
-/* --- HUD & TOMBOL SUARA --- */
+h1 { color: #1e293b; margin-top: 0; font-size: 22px; font-weight: 700; }
 #hud {
-display: flex;
-justify-content: space-between;
-align-items: center;
-font-size: 15px;
-font-weight: bold;
-margin-bottom: 15px;
-color: rgb(37, 99, 235);
-background-color: #eff6ff;
-padding: 8px 12px;
-border-radius: 8px;
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 15px; font-weight: bold; margin-bottom: 15px;
+  color: rgb(37, 99, 235); background-color: #eff6ff; padding: 8px 12px; border-radius: 8px;
 }
 .btn-sound {
-background: none;
-border: none;
-font-size: 18px;
-cursor: pointer;
-padding: 2px 6px;
-border-radius: 6px;
-transition: background 0.2s;
+  background: none; border: none; font-size: 18px; cursor: pointer; padding: 2px 6px; border-radius: 6px;
 }
-.btn-sound:hover {
-background-color: rgba(37, 99, 235, 0.1);
-}
-/* --- STYLING TABEL SOAL PERSAMAAN --- */
+.btn-sound:hover { background-color: rgba(37, 99, 235, 0.1); }
 #target-container {
-background-color: #f1f5f9;
-padding: 8px;
-border-radius: 12px;
-margin-bottom: 20px;
-border: 1px solid #e2e8f0;
+  background-color: #f1f5f9; padding: 8px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #e2e8f0;
 }
-.op-table {
-width: 100%;
-border-collapse: collapse;
-background-color: #ffffff;
-border-radius: 8px;
-overflow: hidden;
-}
-.op-table th {
-background-color: rgb(37, 99, 235);
-color: white;
-padding: 8px;
-font-size: 13px;
-letter-spacing: 0.5px;
-}
-.op-table td {
-padding: 12px;
-font-size: 24px;
-font-weight: bold;
-color: #1e293b;
-border: none;
-}
-/* --- GRID JAWABAN --- */
-#grid {
-display: grid;
-grid-template-columns: repeat(3, 1fr);
-gap: 10px;
-margin-bottom: 20px;
-}
-/* --- TILE JAWABAN --- */
+.op-table { width: 100%; border-collapse: collapse; background-color: #ffffff; border-radius: 8px; overflow: hidden; }
+.op-table th { background-color: rgb(37, 99, 235); color: white; padding: 8px; font-size: 13px; }
+.op-table td { padding: 12px; font-size: 24px; font-weight: bold; color: #1e293b; }
+#grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
 .tile {
-background-color: rgb(37, 99, 235);
-color: white;
-font-size: 24px;
-font-weight: bold;
-padding: 16px 0;
-border-radius: 10px;
-cursor: pointer;
-transition: all 0.15s ease-in-out;
-box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
-min-height: 54px;
-display: flex;
-align-items: center;
-justify-content: center;
+  background-color: rgb(37, 99, 235); color: white; font-size: 24px; font-weight: bold;
+  padding: 16px 0; border-radius: 10px; cursor: pointer; transition: all 0.15s ease-in-out;
+  min-height: 54px; display: flex; align-items: center; justify-content: center;
 }
-.tile:hover {
-background-color: rgb(29, 78, 216);
-}
-.tile:active {
-transform: scale(0.94);
-}
-.tile.correct-flash {
-background-color: rgb(16, 185, 129) !important;
-transform: scale(1.05);
-}
-@keyframes shake {
-0%, 100% { transform: translateX(0); }
-25% { transform: translateX(-5px); }
-75% { transform: translateX(5px); }
-}
-.tile.wrong-flash {
-background-color: rgb(239, 68, 68) !important;
-animation: shake 0.2s ease-in-out;
-}
-/* --- LAYAR AWAL & AKHIR --- */
+.tile:hover { background-color: rgb(29, 78, 216); }
+.tile:active { transform: scale(0.94); }
+.tile.correct-flash { background-color: rgb(16, 185, 129) !important; transform: scale(1.05); }
+@keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+.tile.wrong-flash { background-color: rgb(239, 68, 68) !important; animation: shake 0.2s ease-in-out; }
 #start-screen, #game-over {
-position: absolute;
-top: 0; left: 0; right: 0; bottom: 0;
-color: white;
-display: flex;
-flex-direction: column;
-justify-content: center;
-align-items: center;
-z-index: 10;
-padding: 20px;
-border-radius: 16px;
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0; color: white;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  z-index: 10; padding: 20px; border-radius: 16px;
 }
-#start-screen {
-background-color: #3A1E6E;
+#start-screen { background-color: #3A1E6E; }
+#game-over { background-color: rgba(15, 23, 42, 0.96); display: none; }
+.name-container, .level-container { display: flex; gap: 8px; margin-bottom: 16px; width: 100%; justify-content: center; }
+.btn-name, .btn-level {
+  padding: 10px 8px; font-size: 13px; border-radius: 8px; cursor: pointer; font-weight: 700;
+  border: 2px solid rgba(255, 255, 255, 0.4); background-color: rgba(255, 255, 255, 0.15); color: #ffffff;
+  flex: 1; max-width: 110px;
 }
-#game-over {
-background-color: rgba(15, 23, 42, 0.96);
-display: none;
-}
-/* --- PILIHAN NAMA PEMAIN --- */
-.name-container {
-display: flex;
-gap: 8px;
-margin-bottom: 16px;
-width: 100%;
-justify-content: center;
-}
-.btn-name {
-padding: 10px 8px;
-font-size: 13px;
-border-radius: 8px;
-cursor: pointer;
-font-weight: 700;
-transition: all 0.2s ease;
-border: 2px solid rgba(255, 255, 255, 0.4);
-background-color: rgba(255, 255, 255, 0.15);
-color: #ffffff;
-flex: 1;
-max-width: 110px;
-}
-.btn-name.active {
-background-color: rgb(245, 158, 11);
-color: rgb(15, 23, 42);
-border-color: rgb(245, 158, 11);
-box-shadow: 0 0 12px rgba(245, 158, 11, 0.8);
-}
-/* --- PILIHAN LEVEL & PEMBEDAAN WARNA --- */
-.level-container {
-display: flex;
-gap: 10px;
-margin-bottom: 20px;
-width: 100%;
-justify-content: center;
-}
-.btn-level {
-padding: 10px 14px;
-font-size: 13px;
-border-radius: 8px;
-cursor: pointer;
-font-weight: 700;
-transition: all 0.2s ease;
-border: 2px solid rgba(255, 255, 255, 0.4);
-background-color: rgba(255, 255, 255, 0.15);
-color: #ffffff;
-flex: 1;
-max-width: 100px;
-}
-/* LEVEL 1: HIJAU SEGAR */
-.btn-level-1.active {
-background-color: rgb(34, 197, 94);
-color: #ffffff;
-border-color: rgb(34, 197, 94);
-box-shadow: 0 0 15px rgba(34, 197, 94, 0.8);
-}
-/* LEVEL 2: BIRU CERAH */
-.btn-level-2.active {
-background-color: rgb(14, 165, 233);
-color: #ffffff;
-border-color: rgb(14, 165, 233);
-box-shadow: 0 0 15px rgba(14, 165, 233, 0.8);
-}
-/* LEVEL 3: MERAH CERAH */
-.btn-level-3.active {
-background-color: rgb(239, 68, 68);
-color: #ffffff;
-border-color: rgb(239, 68, 68);
-box-shadow: 0 0 15px rgba(239, 68, 68, 0.8);
-}
-/* --- TOMBOL AKSI --- */
-.action-container {
-display: flex;
-gap: 12px;
-justify-content: center;
-width: 100%;
-margin-bottom: 10px;
-}
+.btn-name.active { background-color: rgb(245, 158, 11); color: rgb(15, 23, 42); border-color: rgb(245, 158, 11); }
+.btn-level-1.active { background-color: rgb(34, 197, 94); border-color: rgb(34, 197, 94); }
+.btn-level-2.active { background-color: rgb(14, 165, 233); border-color: rgb(14, 165, 233); }
+.btn-level-3.active { background-color: rgb(239, 68, 68); border-color: rgb(239, 68, 68); }
+.action-container { display: flex; gap: 12px; justify-content: center; width: 100%; margin-bottom: 10px; }
 button.btn-primary {
-padding: 12px 24px;
-font-size: 15px;
-background-color: rgb(245, 158, 11);
-color: rgb(15, 23, 42);
-border: none;
-border-radius: 8px;
-cursor: pointer;
-font-weight: bold;
-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-transition: background 0.2s, transform 0.1s;
-}
-button.btn-primary:hover {
-background-color: rgb(217, 119, 6);
-color: white;
+  padding: 12px 24px; font-size: 15px; background-color: rgb(245, 158, 11); color: rgb(15, 23, 42);
+  border: none; border-radius: 8px; cursor: pointer; font-weight: bold;
 }
 button.btn-secondary {
-padding: 12px 24px;
-font-size: 15px;
-background-color: #64748b;
-color: white;
-border: none;
-border-radius: 8px;
-cursor: pointer;
-font-weight: bold;
-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-transition: background 0.2s, transform 0.1s;
-}
-button.btn-secondary:hover {
-background-color: #475569;
+  padding: 12px 24px; font-size: 15px; background-color: #64748b; color: white;
+  border: none; border-radius: 8px; cursor: pointer; font-weight: bold;
 }
 .btn-clear {
-background-color: rgb(239, 68, 68);
-color: white;
-font-size: 11px;
-padding: 6px 10px;
-margin-top: 12px;
-margin-left: auto;
-display: none;
-border: none;
-border-radius: 5px;
-cursor: pointer;
+  background-color: rgb(239, 68, 68); color: white; font-size: 11px; padding: 6px 10px;
+  margin-top: 12px; margin-left: auto; display: none; border: none; border-radius: 5px; cursor: pointer;
 }
-/* --- TABEL SKOR PER LEVEL --- */
 #highscore-container {
-background-color: #ffffff;
-color: #1e293b;
-border-radius: 10px;
-padding: 12px;
-width: 100%;
-max-height: 38vh;
-overflow-y: auto;
-margin-top: 10px;
-border: 1px solid #e2e8f0;
+  background-color: #ffffff; color: #1e293b; border-radius: 10px; padding: 12px; width: 100%;
+  max-height: 38vh; overflow-y: auto; margin-top: 10px; border: 1px solid #e2e8f0;
 }
-#highscore-container h3 {
-margin-top: 0;
-margin-bottom: 10px;
-text-align: center;
-color: rgb(37, 99, 235);
-font-size: 15px;
-}
-.hs-level-header {
-font-size: 12px;
-font-weight: 700;
-margin: 10px 0 4px 0;
-text-align: left;
-padding: 4px 8px;
-border-radius: 6px;
-}
+#highscore-container h3 { margin: 0 0 10px 0; text-align: center; color: rgb(37, 99, 235); font-size: 15px; }
+.hs-level-header { font-size: 12px; font-weight: 700; margin: 10px 0 4px 0; text-align: left; padding: 4px 8px; border-radius: 6px; }
 .hs-lvl-3 { background-color: rgba(239, 68, 68, 0.15); color: rgb(225, 29, 72); }
 .hs-lvl-2 { background-color: rgba(14, 165, 233, 0.15); color: rgb(3, 105, 161); }
 .hs-lvl-1 { background-color: rgba(34, 197, 94, 0.15); color: rgb(21, 128, 61); }
-table.score-table {
-width: 100%;
-border-collapse: collapse;
-font-size: 11px;
-margin-bottom: 6px;
-}
-table.score-table th, table.score-table td {
-border-bottom: 1px solid #f1f5f9;
-padding: 5px 3px;
-text-align: center;
-}
-table.score-table th {
-background-color: #f8fafc;
-color: #475569;
-position: sticky;
-top: 0;
-font-weight: 700;
-}
-.star-gold {
-color: rgb(245, 158, 11);
-font-weight: bold;
-}
-/* --- OPTIMASI RESPONSIVE MOBILE --- */
+table.score-table { width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 6px; }
+table.score-table th, table.score-table td { border-bottom: 1px solid #f1f5f9; padding: 5px 3px; text-align: center; }
+table.score-table th { background-color: #f8fafc; color: #475569; position: sticky; top: 0; font-weight: 700; }
+.star-gold { color: rgb(245, 158, 11); font-weight: bold; }
 @media (max-width: 480px) {
-#game-container {
-padding: 18px 14px;
-width: 95%;
-}
-h1 {
-font-size: 19px;
-}
-#hud {
-font-size: 13px;
-padding: 6px 10px;
-}
-.op-table td {
-font-size: 20px;
-padding: 8px;
-}
-.tile {
-font-size: 20px;
-padding: 12px 0;
-min-height: 48px;
-}
-.btn-name, .btn-level {
-padding: 8px 4px;
-font-size: 12px;
-}
-button.btn-primary, button.btn-secondary {
-padding: 10px 18px;
-font-size: 14px;
-}
+  #game-container { padding: 18px 14px; width: 95%; }
+  h1 { font-size: 19px; }
+  .op-table td, .tile { font-size: 20px; }
 }
 </style>
 </head>
@@ -363,432 +100,364 @@ font-size: 14px;
 <div id="game-container">
 <!-- LAYAR AWAL -->
 <div id="start-screen">
-<h1 style="color: white; font-size: 22px; margin-bottom: 4px;">GAME PERSAMAAN SEDERHANA</h1>
-<p style="color: #f3e8ff; font-size: 14px; font-style: italic; margin-bottom: 18px;">"Awali dengan bismillaah nggih"</p>
-<label style="font-size: 14px; font-weight: 600; margin-bottom: 8px;">Nami Kulo:</label>
-<div class="name-container">
-<button type="button" class="btn-name active" onclick="selectName('Abdullah', this)">Abdullah</button>
-<button type="button" class="btn-name" onclick="selectName('Maryam', this)">Maryam</button>
-<button type="button" class="btn-name" onclick="selectName('Fatimah', this)">Fatimah</button>
+  <h1 style="color: white; font-size: 22px; margin-bottom: 4px;">GAME PERSAMAAN SEDERHANA</h1>
+  <p style="color: #f3e8ff; font-size: 14px; font-style: italic; margin-bottom: 18px;">"Awali dengan bismillaah nggih"</p>
+  <label style="font-size: 14px; font-weight: 600; margin-bottom: 8px;">Nami Kulo:</label>
+  <div class="name-container">
+    <button type="button" class="btn-name active" onclick="selectName('Abdullah', this)">Abdullah</button>
+    <button type="button" class="btn-name" onclick="selectName('Maryam', this)">Maryam</button>
+    <button type="button" class="btn-name" onclick="selectName('Fatimah', this)">Fatimah</button>
+  </div>
+  <label style="font-size: 14px; font-weight: 600; margin-bottom: 8px;">Pilih Level Kesulitan:</label>
+  <div class="level-container">
+    <button type="button" class="btn-level btn-level-1 active" onclick="selectLevel(1)">1 (60s)</button>
+    <button type="button" class="btn-level btn-level-2" onclick="selectLevel(2)">2 (40s)</button>
+    <button type="button" class="btn-level btn-level-3" onclick="selectLevel(3)">3 (20s)</button>
+  </div>
+  <button class="btn-primary" onclick="startGame()">Mulai Bermain</button>
 </div>
-<label style="font-size: 14px; font-weight: 600; margin-bottom: 8px;">Pilih Level Kesulitan:</label>
-<div class="level-container">
-<button type="button" class="btn-level btn-level-1 active" onclick="selectLevel(1)">1 (60s)</button>
-<button type="button" class="btn-level btn-level-2" onclick="selectLevel(2)">2 (40s)</button>
-<button type="button" class="btn-level btn-level-3" onclick="selectLevel(3)">3 (20s)</button>
-</div>
-<button class="btn-primary" onclick="startGame()">Mulai Bermain</button>
-</div>
-<!-- AREA PERMAINAN UTAMA -->
+
+<!-- AREA GAME -->
 <h1 id="game-title">Cari Nilai x</h1>
 <div id="hud">
-<div>Soal: <span id="q-count">1</span>/6</div>
-<div>Skor: <span id="score">0</span></div>
-<div>Waktu: <span id="time">60</span>s</div>
-<button id="btn-sound" class="btn-sound" onclick="toggleSound()" title="Aktif/Nonaktifkan Suara">🔊</button>
+  <div>Soal: <span id="q-count">1</span>/6</div>
+  <div>Skor: <span id="score">0</span></div>
+  <div>Waktu: <span id="time">60</span>s</div>
+  <button id="btn-sound" class="btn-sound" onclick="toggleSound()">🔊</button>
 </div>
-<!-- TABEL SOAL PERSAMAAN -->
+
 <div id="target-container">
-<table class="op-table">
-<thead>
-<tr>
-<th>Soal Persamaan</th>
-<th>Nilai x</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><span id="equation-display">x + 2 = 5</span></td>
-<td style="color: rgb(37, 99, 235);">x = ?</td>
-</tr>
-</tbody>
-</table>
+  <table class="op-table">
+    <thead>
+      <tr><th>Soal Persamaan</th><th>Nilai x</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span id="equation-display">x + 2 = 5</span></td>
+        <td style="color: rgb(37, 99, 235);">x = ?</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
-<div id="grid">
-<!-- Pilihan jawaban 3x2 (6 tombol) -->
-</div>
+<div id="grid"></div>
+
 <!-- LAYAR AKHIR -->
 <div id="game-over">
-<h2 style="margin-bottom: 5px; color: white;">Permainan Selesai!</h2>
-<p style="font-size: 18px; margin-top: 5px; color: #cbd5e1;">Skor Akhir Kamu: <span id="final-score" style="color: rgb(251, 191, 36); font-weight: bold;">0</span></p>
-<h3 style="color: #94a3b8; font-weight: normal; margin-top: 0; margin-bottom: 15px; font-size: 13px;">Apapun hasilnya, Alhamdu..lillaah!</h3>
-<!-- DUA TOMBOL BERDAMPINGAN -->
-<div class="action-container">
-<button class="btn-primary" onclick="initGame()">Main Lagi</button>
-<button class="btn-secondary" onclick="exitGame()">Keluar</button>
-</div>
-<!-- CONTAINER TABEL SKOR -->
-<div id="highscore-container">
-<h3>Skor Terbaik Per Level</h3>
-<!-- TABEL LEVEL 3 -->
-<div class="hs-level-header hs-lvl-3">Level 3 (20s)</div>
-<table class="score-table">
-<thead>
-<tr>
-<th>No.</th>
-<th>Nami</th>
-<th>Nilai</th>
-<th>Rating</th>
-<th>Asal</th>
-<th>Kapan</th>
-</tr>
-</thead>
-<tbody id="highscore-body-3"></tbody>
-</table>
-<!-- TABEL LEVEL 2 -->
-<div class="hs-level-header hs-lvl-2">Level 2 (40s)</div>
-<table class="score-table">
-<thead>
-<tr>
-<th>No.</th>
-<th>Nami</th>
-<th>Nilai</th>
-<th>Rating</th>
-<th>Asal</th>
-<th>Kapan</th>
-</tr>
-</thead>
-<tbody id="highscore-body-2"></tbody>
-</table>
-<!-- TABEL LEVEL 1 -->
-<div class="hs-level-header hs-lvl-1">Level 1 (60s)</div>
-<table class="score-table">
-<thead>
-<tr>
-<th>No.</th>
-<th>Nami</th>
-<th>Nilai</th>
-<th>Rating</th>
-<th>Asal</th>
-<th>Kapan</th>
-</tr>
-</thead>
-<tbody id="highscore-body-1"></tbody>
-</table>
-<button id="btn-clear-score" class="btn-clear" onclick="clearHighScores()">Hapus Riwayat Skor</button>
-</div>
-</div>
-</div>
-<script>
-// --- KONFIGURASI LEADERBOARD GOOGLE SHEETS ---
-// Ganti tautan di bawah ini dengan Web App URL dari Google Apps Script Anda
-const LEADERBOARD_API_URL = "https://script.google.com/macros/s/AKfycby_sshqheozQ4SQGEZjQ4fEYoVdBCK-FP-nrjGh8DKtd2-WOrhqTgHiuuphsfSyBxmU/exec";
+  <h2 style="margin-bottom: 5px; color: white;">Permainan Selesai!</h2>
+  <p style="font-size: 18px; margin-top: 5px; color: #cbd5e1;">Skor Akhir Kamu: <span id="final-score" style="color: rgb(251, 191, 36); font-weight: bold;">0</span></p>
+  <h3 style="color: #94a3b8; font-weight: normal; margin-top: 0; margin-bottom: 15px; font-size: 13px;">Apapun hasilnya, Alhamdu..lillaah!</h3>
+  
+  <div class="action-container">
+    <button class="btn-primary" onclick="initGame()">Main Lagi</button>
+    <button class="btn-secondary" onclick="exitGame()">Keluar</button>
+  </div>
 
-// --- VARIABEL GAME ---
+  <div id="highscore-container">
+    <h3>Skor Terbaik Per Level</h3>
+    <div class="hs-level-header hs-lvl-3">Level 3 (20s)</div>
+    <table class="score-table">
+      <thead><tr><th>No.</th><th>Nami</th><th>Nilai</th><th>Rating</th><th>Asal</th><th>Kapan</th></tr></thead>
+      <tbody id="highscore-body-3"></tbody>
+    </table>
+    <div class="hs-level-header hs-lvl-2">Level 2 (40s)</div>
+    <table class="score-table">
+      <thead><tr><th>No.</th><th>Nami</th><th>Nilai</th><th>Rating</th><th>Asal</th><th>Kapan</th></tr></thead>
+      <tbody id="highscore-body-2"></tbody>
+    </table>
+    <div class="hs-level-header hs-lvl-1">Level 1 (60s)</div>
+    <table class="score-table">
+      <thead><tr><th>No.</th><th>Nami</th><th>Nilai</th><th>Rating</th><th>Asal</th><th>Kapan</th></tr></thead>
+      <tbody id="highscore-body-1"></tbody>
+    </table>
+    <button id="btn-clear-score" class="btn-clear" onclick="clearHighScores()">Hapus Riwayat Skor</button>
+  </div>
+</div>
+</div>
+
+<script>
+const LEADERBOARD_API_URL = "https://script.google.com/macros/s/AKfycbzlewXaBVPAm0NE3kFaduAt-LLrDVb0PaRh6PnNvCNeLJzfkXhynPWbsYy28IMB0Ph-/exec";
+
 let score = 0;
 let timeLeft = 60;
 let targetAnswer = 0;
 let timerInterval;
-const gridSize = 3;
+const gridSize = 6;
 const gridElement = document.getElementById('grid');
-let playerName = "Abdullah"; // Default pilihan nama
+let playerName = "Abdullah";
 let playerCity = "Lokal";
 let isMuted = false;
-// Aturan Level & Soal
 let selectedLevel = 1;
 const totalQuestions = 6;
 let currentQuestionNumber = 0;
 let correctAnswersCount = 0;
 const levelTimes = { 1: 60, 2: 40, 3: 20 };
-// Storage Skor
 let highScores = JSON.parse(localStorage.getItem("aritmatikaPersamaanScoresOffline")) || [];
 
-// --- INTEGRASI LEADERBOARD GOOGLE SHEETS ---
 async function kirimSkorKeSpreadsheet(dataSkor) {
-  if (!LEADERBOARD_API_URL || LEADERBOARD_API_URL.includes("https://script.google.com/macros/s/AKfycby_sshqheozQ4SQGEZjQ4fEYoVdBCK-FP-nrjGh8DKtd2-WOrhqTgHiuuphsfSyBxmU/exec")) {
-    console.log("Leaderboard API URL belum dikonfigurasi.");
-    return;
-  }
+  if (!LEADERBOARD_API_URL) return;
   try {
     await fetch(LEADERBOARD_API_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify(dataSkor)
     });
-    console.log("Skor berhasil dikirim ke Google Sheets.");
     ambilLeaderboardOnline();
   } catch (error) {
-    console.error("Gagal mengirim skor ke Google Sheets:", error);
+    console.error("Gagal mengirim skor:", error);
   }
 }
 
 async function ambilLeaderboardOnline() {
-  if (!LEADERBOARD_API_URL || LEADERBOARD_API_URL.includes("https://script.google.com/macros/s/AKfycby_sshqheozQ4SQGEZjQ4fEYoVdBCK-FP-nrjGh8DKtd2-WOrhqTgHiuuphsfSyBxmU/exec")) return;
+  if (!LEADERBOARD_API_URL) return;
   try {
     const response = await fetch(LEADERBOARD_API_URL);
     const result = await response.json();
     if (result.status === "success" && Array.isArray(result.data)) {
-      // Gabungkan data skor dari Google Sheets ke dalam tampilan lokal jika ada
-      console.log("Data leaderboard online berhasil dimuat:", result.data);
+      highScores = result.data;
+      localStorage.setItem("aritmatikaPersamaanScoresOffline", JSON.stringify(highScores));
+      displayHighScores();
     }
   } catch (error) {
-    console.error("Gagal memuat leaderboard dari Google Sheets:", error);
+    console.error("Gagal memuat leaderboard:", error);
   }
 }
 
-// --- DETEKSI KOTA VIA IP ADDRESS ---
 async function fetchPlayerLocation() {
-try {
-const response = await fetch('https://ipwho.is/');
-const data = await response.json();
-if (data.success && data.city) {
-playerCity = data.city;
-} else {
-playerCity = "Lokal";
-}
-} catch (error) {
-playerCity = "Lokal";
-}
+  try {
+    const response = await fetch('https://ipwho.is/');
+    const data = await response.json();
+    if (data.success && data.city) playerCity = data.city;
+  } catch (e) {
+    playerCity = "Lokal";
+  }
 }
 fetchPlayerLocation();
 
-// --- EFEK SUARA OFFLINE & TOGGLE MUTE ---
 let audioCtx = null;
 function initAudio() {
-if (!audioCtx) {
-audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-}
-if (audioCtx.state === 'suspended') {
-audioCtx.resume();
-}
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
 }
 function toggleSound() {
-isMuted = !isMuted;
-document.getElementById('btn-sound').innerText = isMuted ? "🔇" : "🔊";
+  isMuted = !isMuted;
+  document.getElementById('btn-sound').innerText = isMuted ? "🔇" : "🔊";
 }
 function playSound(type) {
-if (isMuted) return;
-initAudio();
-const osc = audioCtx.createOscillator();
-const gain = audioCtx.createGain();
-osc.connect(gain);
-gain.connect(audioCtx.destination);
-const now = audioCtx.currentTime;
-if (type === 'correct') {
-osc.type = 'triangle';
-osc.frequency.setValueAtTime(523.25, now);
-osc.frequency.setValueAtTime(659.25, now + 0.08);
-osc.frequency.setValueAtTime(783.99, now + 0.16);
-gain.gain.setValueAtTime(0.2, now);
-gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
-osc.start(now);
-osc.stop(now + 0.3);
-} else if (type === 'wrong') {
-osc.type = 'sawtooth';
-osc.frequency.setValueAtTime(220, now);
-osc.frequency.setValueAtTime(160, now + 0.1);
-gain.gain.setValueAtTime(0.15, now);
-gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
-osc.start(now);
-osc.stop(now + 0.25);
+  if (isMuted) return;
+  initAudio();
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+  const now = audioCtx.currentTime;
+  if (type === 'correct') {
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(523.25, now);
+    osc.frequency.setValueAtTime(659.25, now + 0.08);
+    osc.frequency.setValueAtTime(783.99, now + 0.16);
+    gain.gain.setValueAtTime(0.2, now);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+    osc.start(now); osc.stop(now + 0.3);
+  } else {
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(220, now);
+    osc.frequency.setValueAtTime(160, now + 0.1);
+    gain.gain.setValueAtTime(0.15, now);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+    osc.start(now); osc.stop(now + 0.25);
+  }
 }
-}
+
 function selectName(name, btnElement) {
-playerName = name;
-document.querySelectorAll('.btn-name').forEach(btn => btn.classList.remove('active'));
-btnElement.classList.add('active');
+  playerName = name;
+  document.querySelectorAll('.btn-name').forEach(btn => btn.classList.remove('active'));
+  btnElement.classList.add('active');
 }
 function selectLevel(lvl) {
-selectedLevel = lvl;
-const buttons = document.querySelectorAll('.btn-level');
-buttons.forEach((btn, index) => {
-if (index + 1 === lvl) {
-btn.classList.add('active');
-} else {
-btn.classList.remove('active');
-}
-});
+  selectedLevel = lvl;
+  document.querySelectorAll('.btn-level').forEach((btn, idx) => {
+    btn.classList.toggle('active', idx + 1 === lvl);
+  });
 }
 function checkClearButtonVisibility() {
-const btn = document.getElementById("btn-clear-score");
-if (!btn) return;
-const now = new Date();
-const currentMinutes = now.getHours() * 60 + now.getMinutes();
-const startMinutes = 5 * 60;   // 06:00
-const endMinutes = 20 * 60;    // 13:00
-if (currentMinutes >= startMinutes && currentMinutes <= endMinutes) {
-btn.style.display = "block";
-} else {
-btn.style.display = "none";
+  const btn = document.getElementById("btn-clear-score");
+  if (!btn) return;
+  const now = new Date();
+  const currentMinutes = now.getHours() * 60 + now.getMinutes();
+  btn.style.display = (currentMinutes >= 300 && currentMinutes <= 1200) ? "block" : "none";
 }
-}
+
 function startGame() {
-initAudio();
-document.getElementById("game-title").innerText = "Fokus " + playerName + "!";
-document.getElementById("start-screen").style.display = "none";
-initGame();
+  initAudio();
+  document.getElementById("game-title").innerText = "Fokus " + playerName + "!";
+  document.getElementById("start-screen").style.display = "none";
+  initGame();
 }
 function initGame() {
-score = 0;
-currentQuestionNumber = 0;
-correctAnswersCount = 0;
-timeLeft = levelTimes[selectedLevel];
-document.getElementById('score').innerText = score;
-document.getElementById('time').innerText = timeLeft;
-document.getElementById('q-count').innerText = 1;
-document.getElementById('game-over').style.display = 'none';
-clearInterval(timerInterval);
-timerInterval = setInterval(updateTimer, 1000);
-nextQuestion();
+  score = 0; currentQuestionNumber = 0; correctAnswersCount = 0;
+  timeLeft = levelTimes[selectedLevel];
+  document.getElementById('score').innerText = score;
+  document.getElementById('time').innerText = timeLeft;
+  document.getElementById('q-count').innerText = 1;
+  document.getElementById('game-over').style.display = 'none';
+  clearInterval(timerInterval);
+  timerInterval = setInterval(updateTimer, 1000);
+  nextQuestion();
 }
 function exitGame() {
-clearInterval(timerInterval);
-document.getElementById('game-over').style.display = 'none';
-document.getElementById('start-screen').style.display = 'flex';
+  clearInterval(timerInterval);
+  document.getElementById('game-over').style.display = 'none';
+  document.getElementById('start-screen').style.display = 'flex';
 }
 function nextQuestion() {
-if (currentQuestionNumber >= totalQuestions) {
-endGame();
-return;
+  if (currentQuestionNumber >= totalQuestions) { endGame(); return; }
+  currentQuestionNumber++;
+  document.getElementById('q-count').innerText = currentQuestionNumber;
+  generateQuestion();
 }
-currentQuestionNumber++;
-document.getElementById('q-count').innerText = currentQuestionNumber;
-generateQuestion();
-}
-/* ANGKA YANG DIMAINKAN <=10 */
 function generateQuestion() {
-let type = Math.floor(Math.random() * 4);
-let x, a, b, eqText = "";
-if (type === 0) {
-b = Math.floor(Math.random() * 9) + 2;
-a = Math.floor(Math.random() * (b - 1)) + 1;
-x = b - a;
-eqText = (Math.random() > 0.5) ? `x + ${a} = ${b}` : `${a} + x = ${b}`;
-} else if (type === 1) {
-x = Math.floor(Math.random() * 9) + 2;
-a = Math.floor(Math.random() * (x - 1)) + 1;
-b = x - a;
-eqText = `x - ${a} = ${b}`;
-} else if (type === 2) {
-x = Math.floor(Math.random() * 10) + 1;
-let maxA = Math.floor(10 / x);
-a = Math.floor(Math.random() * maxA) + 1;
-b = a * x;
-eqText = (Math.random() > 0.5) ? `${a} × x = ${b}` : `x × ${a} = ${b}`;
-} else {
-a = Math.floor(Math.random() * 4) + 2;
-b = Math.floor(Math.random() * Math.floor(10 / a)) + 1;
-x = a * b;
-eqText = `x ÷ ${a} = ${b}`;
-}
-targetAnswer = x;
-document.getElementById('equation-display').innerText = eqText;
-createGridWithAnswer(targetAnswer);
+  let type = Math.floor(Math.random() * 4);
+  let x, a, b, eqText = "";
+  if (type === 0) {
+    b = Math.floor(Math.random() * 9) + 2;
+    a = Math.floor(Math.random() * (b - 1)) + 1;
+    x = b - a;
+    eqText = (Math.random() > 0.5) ? `x + ${a} = ${b}` : `${a} + x = ${b}`;
+  } else if (type === 1) {
+    x = Math.floor(Math.random() * 9) + 2;
+    a = Math.floor(Math.random() * (x - 1)) + 1;
+    b = x - a;
+    eqText = `x - ${a} = ${b}`;
+  } else if (type === 2) {
+    x = Math.floor(Math.random() * 10) + 1;
+    let maxA = Math.floor(10 / x);
+    a = Math.floor(Math.random() * maxA) + 1;
+    b = a * x;
+    eqText = (Math.random() > 0.5) ? `${a} × x = ${b}` : `x × ${a} = ${b}`;
+  } else {
+    a = Math.floor(Math.random() * 4) + 2;
+    b = Math.floor(Math.random() * Math.floor(10 / a)) + 1;
+    x = a * b;
+    eqText = `x ÷ ${a} = ${b}`;
+  }
+  targetAnswer = x;
+  document.getElementById('equation-display').innerText = eqText;
+  createGridWithAnswer(targetAnswer);
 }
 function createGridWithAnswer(correctAnswer) {
-gridElement.innerHTML = '';
-let correctIndex = Math.floor(Math.random() * gridSize);
-let usedNumbers = new Set();
-usedNumbers.add(correctAnswer);
-for (let i = 0; i < gridSize; i++) {
-let val;
-if (i === correctIndex) {
-val = correctAnswer;
-} else {
-do {
-val = Math.floor(Math.random() * 10) + 1;
-} while (usedNumbers.has(val));
-usedNumbers.add(val);
-}
-let tile = document.createElement('div');
-tile.classList.add('tile');
-tile.innerText = val;
-tile.addEventListener('click', () => handleSingleClick(tile, val));
-gridElement.appendChild(tile);
-}
+  gridElement.innerHTML = '';
+  let correctIndex = Math.floor(Math.random() * gridSize);
+  let usedNumbers = new Set([correctAnswer]);
+  for (let i = 0; i < gridSize; i++) {
+    let val = (i === correctIndex) ? correctAnswer : null;
+    if (val === null) {
+      do { val = Math.floor(Math.random() * 10) + 1; } while (usedNumbers.has(val));
+      usedNumbers.add(val);
+    }
+    let tile = document.createElement('div');
+    tile.classList.add('tile');
+    tile.innerText = val;
+    tile.addEventListener('click', () => handleSingleClick(tile, val));
+    gridElement.appendChild(tile);
+  }
 }
 function handleSingleClick(tile, selectedValue) {
-if (selectedValue === targetAnswer) {
-playSound('correct');
-score += 10;
-correctAnswersCount++;
-document.getElementById('score').innerText = score;
-tile.classList.add('correct-flash');
-setTimeout(() => {
-nextQuestion();
-}, 200);
-} else {
-playSound('wrong');
-tile.classList.add('wrong-flash');
-setTimeout(() => {
-tile.classList.remove('wrong-flash');
-nextQuestion();
-}, 300);
-}
+  if (selectedValue === targetAnswer) {
+    playSound('correct');
+    score += 10; correctAnswersCount++;
+    document.getElementById('score').innerText = score;
+    tile.classList.add('correct-flash');
+    setTimeout(nextQuestion, 200);
+  } else {
+    playSound('wrong');
+    tile.classList.add('wrong-flash');
+    setTimeout(() => { tile.classList.remove('wrong-flash'); nextQuestion(); }, 300);
+  }
 }
 function updateTimer() {
-timeLeft--;
-document.getElementById('time').innerText = timeLeft;
-if (timeLeft <= 0) {
-endGame();
-}
+  timeLeft--;
+  document.getElementById('time').innerText = timeLeft;
+  if (timeLeft <= 0) endGame();
 }
 function endGame() {
-clearInterval(timerInterval);
-document.getElementById('final-score').innerText = score;
-saveHighScore();
-displayHighScores();
-document.getElementById('game-over').style.display = 'flex';
+  clearInterval(timerInterval);
+  document.getElementById('final-score').innerText = score;
+  saveHighScore();
+  displayHighScores();
+  document.getElementById('game-over').style.display = 'flex';
 }
 function getStarRating(correctCount) {
-if (correctCount === 6) return "⭐⭐⭐";
-if (correctCount >= 4) return "⭐⭐";
-if (correctCount >= 1) return "⭐";
-return "☆";
+  if (correctCount === 6) return "⭐⭐⭐";
+  if (correctCount >= 4) return "⭐⭐";
+  if (correctCount >= 1) return "⭐";
+  return "☆";
 }
 function saveHighScore() {
-const now = new Date();
-const listHari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-const namaHari = listHari[now.getDay()];
-const dateStr = String(now.getDate()).padStart(2, '0') + "/" +
-String(now.getMonth() + 1).padStart(2, '0') + "/" +
-now.getFullYear();
-const timeStr = String(now.getHours()).padStart(2, '0') + ":" +
-String(now.getMinutes()).padStart(2, '0');
-const dateTimeFormat = namaHari + ", " + dateStr + " " + timeStr;
-const starRating = getStarRating(correctAnswersCount);
-const newScoreData = {
-nami: playerName,
-nilai: score,
-level: selectedLevel,
-stars: starRating,
-asal: playerCity,
-kapan: dateTimeFormat
-};
-highScores.push(newScoreData);
-localStorage.setItem("aritmatikaPersamaanScoresOffline", JSON.stringify(highScores));
-
-// MEMANGGIL INTEGRASI GOOGLE SHEETS
-kirimSkorKeSpreadsheet(newScoreData);
+  const now = new Date();
+  const listHari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+  const dateStr = String(now.getDate()).padStart(2, '0') + "/" + String(now.getMonth() + 1).padStart(2, '0') + "/" + now.getFullYear();
+  const timeStr = String(now.getHours()).padStart(2, '0') + ":" + String(now.getMinutes()).padStart(2, '0');
+  const dateTimeFormat = listHari[now.getDay()] + ", " + dateStr + " " + timeStr;
+  
+  const newScoreData = {
+    nami: playerName, nilai: score, level: selectedLevel,
+    stars: getStarRating(correctAnswersCount), asal: playerCity, kapan: dateTimeFormat
+  };
+  
+  highScores.push(newScoreData);
+  localStorage.setItem("aritmatikaPersamaanScoresOffline", JSON.stringify(highScores));
+  kirimSkorKeSpreadsheet(newScoreData);
 }
 function displayHighScores() {
-for (let lvl = 3; lvl >= 1; lvl--) {
-const tbody = document.getElementById(`highscore-body-${lvl}`);
-tbody.innerHTML = '';
-const lvlScores = highScores
-.filter(item => Number(item.level || 1) === lvl)
-.sort((a, b) => b.nilai - a.nilai)
-.slice(0, 5);
-if (lvlScores.length === 0) {
-tbody.innerHTML = '<tr><td colspan="6" style="color:#94a3b8;">Belum ada skor.</td></tr>';
-} else {
-lvlScores.forEach((data, index) => {
-const tr = document.createElement('tr');
-tr.innerHTML = `
-<td>${index + 1}</td>
-<td><b>${data.nami}</b></td>
-<td style="color: rgb(37, 99, 235); font-weight: bold;">${data.nilai}</td>
-<td><span class="star-gold">${data.stars || '⭐'}</span></td>
-<td>${data.asal || 'Lokal'}</td>
-<td>${data.kapan}</td>
-`;
-tbody.appendChild(tr);
-});
+  for (let lvl = 3; lvl >= 1; lvl--) {
+    const tbody = document.getElementById(`highscore-body-${lvl}`);
+    tbody.innerHTML = '';
+    const lvlScores = highScores
+      .filter(item => Number(item.level || 1) === lvl)
+      .sort((a, b) => b.nilai - a.nilai)
+      .slice(0, 10);
+    
+    if (lvlScores.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" style="color:#94a3b8;">Belum ada skor.</td></tr>';
+    } else {
+      lvlScores.forEach((data, index) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${index + 1}</td>
+          <td><b>${data.nami}</b></td>
+          <td style="color: rgb(37, 99, 235); font-weight: bold;">${data.nilai}</td>
+          <td><span class="star-gold">${data.stars || '⭐'}</span></td>
+          <td>${data.asal || 'Lokal'}</td>
+          <td>${data.kapan}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+  }
+  checkClearButtonVisibility();
 }
+function clearHighScores() {
+  if (highScores.length <= 3) {
+    alert("Riwayat skor sudah minimal. Tidak ada skor yang perlu dihapus.");
+    return;
+  }
+  if (confirm("Apakah Anda yakin ingin menghapus riwayat lokal dan menyisakan 3 skor terbaik per level?")) {
+    let keptScores = [];
+    [1-3].forEach(lvl => {
+      const topLvlScores = highScores
+        .filter(item => Number(item.level || 1) === lvl)
+        .sort((a, b) => b.nilai - a.nilai)
+        .slice(0, 3);
+      keptScores = keptScores.concat(topLvlScores);
+    });
+    highScores = keptScores;
+    localStorage.setItem("aritmatikaPersamaanScoresOffline", JSON.stringify(highScores));
+    displayHighScores();
+  }
 }
-checkClearButtonVisibility();
-}
-function clearHighScores() { if (highScores.length &lt;= 3) { alert("Riwayat skor sudah minimal. Tidak ada skor yang perlu dihapus."); return; } if (confirm("Apakah Anda yakin ingin menghapus riwayat skor lama dan menyisakan 3 skor terbaik per level?")) { let keptScores = []; [1-3].forEach(lvl =&gt; { const topLvlScores = highScores .filter(item =&gt; Number(item.level || 1) === lvl) .sort((a, b) =&gt; b.nilai - a.nilai) .slice(0, 3); keptScores = keptScores.concat(topLvlScores); }); highScores = keptScores; localStorage.setItem("aritmatikaPersamaanScoresOffline", JSON.stringify(highScores)); displayHighScores(); } }
+
+// Muat skor online saat halaman dibuka
+ambilLeaderboardOnline();
 </script>
 </body>
 </html>
