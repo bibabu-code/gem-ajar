@@ -495,7 +495,7 @@ let highScores = JSON.parse(localStorage.getItem("aritmatikaPersamaanScoresOffli
 
 // --- INTEGRASI LEADERBOARD GOOGLE SHEETS ---
 async function kirimSkorKeSpreadsheet(dataSkor) {
-  if (!LEADERBOARD_API_URL || LEADERBOARD_API_URL.includes("YOUR_SCRIPT_ID_HERE")) {
+  if (!LEADERBOARD_API_URL || LEADERBOARD_API_URL.includes("https://script.google.com/macros/s/AKfycby_sshqheozQ4SQGEZjQ4fEYoVdBCK-FP-nrjGh8DKtd2-WOrhqTgHiuuphsfSyBxmU/exec")) {
     console.log("Leaderboard API URL belum dikonfigurasi.");
     return;
   }
@@ -513,7 +513,7 @@ async function kirimSkorKeSpreadsheet(dataSkor) {
 }
 
 async function ambilLeaderboardOnline() {
-  if (!LEADERBOARD_API_URL || LEADERBOARD_API_URL.includes("YOUR_SCRIPT_ID_HERE")) return;
+  if (!LEADERBOARD_API_URL || LEADERBOARD_API_URL.includes("https://script.google.com/macros/s/AKfycby_sshqheozQ4SQGEZjQ4fEYoVdBCK-FP-nrjGh8DKtd2-WOrhqTgHiuuphsfSyBxmU/exec")) return;
   try {
     const response = await fetch(LEADERBOARD_API_URL);
     const result = await response.json();
