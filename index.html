@@ -215,7 +215,7 @@ async function ambilLeaderboardOnline() {
   try {
     const response = await fetch(LEADERBOARD_API_URL);
     const result = await response.json();
-    if (result.status === "success" &amp;&amp; Array.isArray(result.data)) {
+    if (result.status === "success" && Array.isArray(result.data)) {
     // Gabungkan data online tanpa menghapus format lokal    
       highScores = result.data;
       localStorage.setItem("aritmatikaPersamaanScoresOffline", JSON.stringify(highScores));
