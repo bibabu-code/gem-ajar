@@ -175,13 +175,13 @@ table.score-table th { background-color: #f8fafc; color: #475569; position: stic
 </div>
 
 <script>
-const LEADERBOARD_API_URL = "https://script.google.com/macros/s/AKfycbzlewXaBVPAm0NE3kFaduAt-LLrDVb0PaRh6PnNvCNeLJzfkXhynPWbsYy28IMB0Ph-/exec";
+const LEADERBOARD_API_URL = "https://script.google.com/macros/s/AKfycbzZA-FQVuiNeW16ivXijqZIjnmQaQeVRX3BbKLPZYQ0XDHF4Pe9fZFFrtBRWKhujPWq/exec";
 
 let score = 0;
 let timeLeft = 60;
 let targetAnswer = 0;
 let timerInterval;
-const gridSize = 3;
+const gridSize = 6;
 const gridElement = document.getElementById('grid');
 let playerName = "Abdullah";
 let playerCity = "Lokal";
@@ -193,6 +193,7 @@ let correctAnswersCount = 0;
 const levelTimes = { 1: 60, 2: 40, 3: 20 };
 let highScores = JSON.parse(localStorage.getItem("aritmatikaPersamaanScoresOffline")) || [];
 
+// 2. Fungsi Pengiriman Skor (POST)
 async function kirimSkorKeSpreadsheet(dataSkor) {
   if (!LEADERBOARD_API_URL) return;
   try {
@@ -201,18 +202,21 @@ async function kirimSkorKeSpreadsheet(dataSkor) {
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify(dataSkor)
     });
-    ambilLeaderboardOnline();
+    // Ambil ulang data terbaru setelah berhasil menyimpan 
+    ambilLeaderboardOnline(); 
   } catch (error) {
-    console.error("Gagal mengirim skor:", error);
+    console.error("Gagal mengirim skor (koneksi offline/terganggu):", error);
   }
 }
 
+// 3. Fungsi Pemuatan Skor Online (GET)
 async function ambilLeaderboardOnline() {
   if (!LEADERBOARD_API_URL) return;
   try {
     const response = await fetch(LEADERBOARD_API_URL);
     const result = await response.json();
-    if (result.status === "success" && Array.isArray(result.data)) {
+    if (result.status === "success" &amp;&amp; Array.isArray(result.data)) {
+    // Gabungkan data online tanpa menghapus format lokal    
       highScores = result.data;
       localStorage.setItem("aritmatikaPersamaanScoresOffline", JSON.stringify(highScores));
       displayHighScores();
@@ -392,20 +396,28 @@ function getStarRating(correctCount) {
   if (correctCount >= 1) return "⭐";
   return "☆";
 }
-function saveHighScore() {
-  const now = new Date();
-  const listHari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-  const dateStr = String(now.getDate()).padStart(2, '0') + "/" + String(now.getMonth() + 1).padStart(2, '0') + "/" + now.getFullYear();
-  const timeStr = String(now.getHours()).padStart(2, '0') + ":" + String(now.getMinutes()).padStart(2, '0');
-  const dateTimeFormat = listHari[now.getDay()] + ", " + dateStr + " " + timeStr;
-  
-  const newScoreData = {
-    nami: playerName, nilai: score, level: selectedLevel,
-    stars: getStarRating(correctAnswersCount), asal: playerCity, kapan: dateTimeFormat
-  };
-  
+// 4. Integrasikan ke dalam saveHighScore() 
+function saveHighScore() { 
+const now = new Date(); 
+const listHari = ["Ahad", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"]; 
+const dateStr = String(now.getDate()).padStart(2, '0') + "/" + String(now.getMonth() + 1).padStart(2, '0') + "/" + now.getFullYear(); 
+const timeStr = String(now.getHours()).padStart(2, '0') + ":" + String(now.getMinutes()).padStart(2, '0'); 
+const dateTimeFormat = listHari[now.getDay()] + ", " + dateStr + " " + timeStr; 
+
+// Objek data dibuat dulu  
+const newScoreData = { 
+    nami: playerName, 
+    nilai: score, 
+    level: selectedLevel, 
+    stars: getStarRating(correctAnswersCount), 
+    asal: playerCity, 
+    kapan: dateTimeFormat 
+};  
+  // Simpan ke lokal dulu
   highScores.push(newScoreData);
   localStorage.setItem("aritmatikaPersamaanScoresOffline", JSON.stringify(highScores));
+
+  // Panggil fungsi kirim skor ke Google Sheets
   kirimSkorKeSpreadsheet(newScoreData);
 }
 function displayHighScores() {
@@ -456,7 +468,7 @@ function clearHighScores() {
   }
 }
 
-// Muat skor online saat halaman dibuka
+// Muat skor online saat game dibuka
 ambilLeaderboardOnline();
 </script>
 </body>
